@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Jersey 25', sans-serif;
+}
+
+body {
+    background-color: #fcf8f2;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header, .footer {
+    background-color: #FDE6C3;
+    border: 1px solid #000;
+    text-align: center;
+    padding: 15px;
+    z-index: 10;
+}
+
+.header {
+    border-top: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.footer {
+    border-bottom: none;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    margin-top: 20px;
+}
+
+.header h1, .footer h1 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #000;
+}
+
+.main-container {
+    display: grid;
+    grid-template-columns: 4fr 3fr 1.5fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 15px;
+    padding: 0 15px;
+    flex: 1;
+}
+
+.card {
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #000;
+}
+
+.card h2 {
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+.post-card {
+    background-color: #FFBB7F;
+    grid-column: 1;
+    grid-row: 1 / span 3;
+}
+
+.post-card h2 {
+    font-size: 3rem;
+}
+
+.text-button-card {
+    background-color: #FFBB7F;
+    grid-column: 2;
+}
+
+.vertical-card {
+    background-color: #FFBB7F;
+    grid-column: 3;
+    grid-row: 1 / span 3;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
