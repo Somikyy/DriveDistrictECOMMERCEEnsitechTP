@@ -1,5 +1,10 @@
+<?php require_once 'data.php'; 
+$cartCount = getCartCount();
+$currentPage = basename($_SERVER['PHP_SELF']);
+function navClass($page) { global $currentPage; return $currentPage === $page ? 'nav-link active' : 'nav-link'; }
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,18 +16,18 @@
 </head>
 <body>
     <header class="header">
-        <h1>Drive District</h1>
+        <h1><a href="index.php" style="color:inherit;text-decoration:none;">Drive District</a></h1>
     </header>
 
     <nav class="nav-bar">
-        <a href="index.php" class="nav-link">Main</a>
-        <a href="catalogue.php" class="nav-link">Catalogue</a>
-        <a href="social_media.php" class="nav-link">Social Media</a>
-        <a href="informations.php" class="nav-link">Informations</a>
-        <a href="histoire.php" class="nav-link">Histoire</a>
-        <a href="faq.php" class="nav-link">FAQ</a>
-        <a href="product_detail.php" class="nav-link">Product Detail</a>
-        <a href="payment.php" class="nav-link">Payment</a>
-        <a href="cart.php" class="nav-link">Cart</a>
-        <a href="a_propos.php" class="nav-link">A propos</a>
+        <a href="index.php" class="<?= navClass('index.php') ?>">Home</a>
+        <a href="catalogue.php" class="<?= navClass('catalogue.php') ?>">Catalogue</a>
+        <a href="social_media.php" class="<?= navClass('social_media.php') ?>">Social Media</a>
+        <a href="informations.php" class="<?= navClass('informations.php') ?>">Informations</a>
+        <a href="histoire.php" class="<?= navClass('histoire.php') ?>">Histoire</a>
+        <a href="faq.php" class="<?= navClass('faq.php') ?>">FAQ</a>
+        <a href="a_propos.php" class="<?= navClass('a_propos.php') ?>">À propos</a>
+        <a href="cart.php" class="<?= navClass('cart.php') ?> cart-link">
+            🛒 Cart <?php if($cartCount > 0): ?><span class="cart-badge"><?= $cartCount ?></span><?php endif; ?>
+        </a>
     </nav>
