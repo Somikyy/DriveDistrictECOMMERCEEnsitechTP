@@ -2,7 +2,7 @@
 
 <?php
 $page = isset($_GET['p']) ? max(1, (int)$_GET['p']) : 1;
-$limit = 10;
+$limit = 8;
 $total_products = count($products);
 $total_pages = ceil($total_products / $limit);
 if ($page > $total_pages && $total_pages > 0) $page = $total_pages;
@@ -40,19 +40,19 @@ $current_products = array_slice($products, $offset, $limit);
     <?php if($total_pages > 1): ?>
     <div class="pagination" style="display:flex; gap:10px; margin-top:10px;">
         <?php if($page > 1): ?>
-            <a href="catalogue.php?p=<?= $page - 1 ?>" class="buy-button" style="width:40px; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+            <a href="catalogue.php?p=<?= $page - 1 ?>" class="page-link">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </a>
         <?php endif; ?>
         
         <?php for($i = 1; $i <= $total_pages; $i++): ?>
-            <a href="catalogue.php?p=<?= $i ?>" class="buy-button" style="width:40px; text-decoration:none; text-align:center; display:flex; align-items:center; justify-content:center; <?= $i === $page ? 'background-color:#1a1a1a; color:#FFBB7F;' : '' ?>">
+            <a href="catalogue.php?p=<?= $i ?>" class="page-link <?= $i === $page ? 'active' : '' ?>">
                 <?= $i ?>
             </a>
         <?php endfor; ?>
 
         <?php if($page < $total_pages): ?>
-            <a href="catalogue.php?p=<?= $page + 1 ?>" class="buy-button" style="width:40px; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+            <a href="catalogue.php?p=<?= $page + 1 ?>" class="page-link">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
         <?php endif; ?>
