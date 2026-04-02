@@ -13,8 +13,8 @@ $p = $products[$id] ?? $products[1];
             </div>
         </div>
         <div class="product-colors" style="max-width:100%; justify-content:center; gap:15px;">
-            <?php foreach($p['colors'] as $color): ?>
-            <div class="color-box" style="background-color:<?= $color ?>; width:40px; height:40px; border:2px solid #000; cursor:pointer;" onclick="this.parentElement.querySelectorAll('.color-box').forEach(b=>b.style.outline='');this.style.outline='3px solid #000';"></div>
+            <?php foreach($p['colors'] as $i => $color): ?>
+            <div class="color-box" style="background-color:<?= $color ?>; width:40px; height:40px; border:2px solid #000; cursor:pointer; <?= $i===0 ? 'outline:3px solid #000;' : '' ?>" onclick="this.parentElement.querySelectorAll('.color-box').forEach(b=>b.style.outline='');this.style.outline='3px solid #000'; document.getElementById('selected-color').value='<?= $color ?>';"></div>
             <?php endforeach; ?>
         </div>
         <div class="product-metadata" style="margin-top:5px;">
@@ -34,6 +34,7 @@ $p = $products[$id] ?? $products[1];
             <form method="POST" action="cart_actions.php" style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
                 <input type="hidden" name="action" value="add">
                 <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                <input type="hidden" name="color" id="selected-color" value="<?= htmlspecialchars($p['colors'][0] ?? '') ?>">
                 <input type="hidden" name="redirect" value="product_detail.php?id=<?= $p['id'] ?>">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
                     <?php foreach($p['sizes'] as $i => $size): ?>
@@ -45,7 +46,10 @@ $p = $products[$id] ?? $products[1];
                 </div>
                 <button type="submit" class="buy-button" style="font-size:2rem; padding:10px 30px;">Add to Cart</button>
             </form>
-            <a href="catalogue.php" class="buy-button" style="font-size:1.5rem;">← Back to Catalogue</a>
+            <a href="catalogue.php" class="buy-button" style="font-size:1.5rem; display:flex; align-items:center; justify-content:center; gap:5px; text-decoration:none;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Back to Catalogue
+            </a>
         </div>
     </div>
 </main>

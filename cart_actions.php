@@ -4,22 +4,39 @@ require_once 'data.php';
 $action = $_POST['action'] ?? '';
 $product_id = (int)($_POST['product_id'] ?? 0);
 $size = trim($_POST['size'] ?? '');
+$color = trim($_POST['color'] ?? '');
 $redirect = $_POST['redirect'] ?? 'catalogue.php';
 
 if ($action === 'add' && isset($products[$product_id])) {
-    $key = $product_id . '_' . $size;
+    $key = $product_id . '_' . $size . '_' . urlencode($color);
     if (isset($_SESSION['cart'][$key])) {
         $_SESSION['cart'][$key]['qty']++;
     } else {
         $_SESSION['cart'][$key] = [
             'product_id' => $product_id,
             'size' => $size,
+            'color' => $color,
             'qty' => 1,
         ];
     }
 } elseif ($action === 'remove') {
     $key = $_POST['key'] ?? '';
     unset($_SESSION['cart'][$key]);
+    $redirect = 'cart.php';
+} elseif ($action === 'increase') {
+    $key = $_POST['key'] ?? '';
+    if (isset($_SESSION['cart'][$key])) {
+        $_SESSION['cart'][$key]['qty']++;
+    }
+    $redirect = 'cart.php';
+} elseif ($action === 'decrease') {
+    $key = $_POST['key'] ?? '';
+    if (isset($_SESSION['cart'][$key])) {
+        $_SESSION['cart'][$key]['qty']--;
+        if ($_SESSION['cart'][$key]['qty'] <= 0) {
+            unset($_SESSION['cart'][$key]);
+        }
+    }
     $redirect = 'cart.php';
 } elseif ($action === 'clear') {
     $_SESSION['cart'] = [];
