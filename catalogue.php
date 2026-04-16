@@ -15,11 +15,11 @@ $current_products = array_slice($products, $offset, $limit);
     <div class="catalogue-grid">
         <?php foreach($current_products as $p): ?>
         <div class="product-item">
-            <a href="product_detail.php?id=<?= $p['id'] ?>" class="catalogue-post" style="text-decoration:none; color:inherit; cursor:pointer;">
-                <div style="text-align:center;">
-                    <h2><?= $p['name'] ?></h2>
-                    <p style="font-size:1.5rem;"><?= $p['category'] ?></p>
-                    <p style="font-size:2rem; margin-top:5px;">$<?= $p['price'] ?></p>
+            <a href="product_detail.php?id=<?= $p['id'] ?>" class="catalogue-post" style="text-decoration:none; color:inherit; cursor:pointer; <?php if(!empty($p['image'])) echo "background-image: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 100%), url('".$p['image']."'); background-size: cover; background-position: center;"; ?>">
+                <div style="text-align:center; background: rgba(247, 243, 232, 0.95); padding: 10px 20px; border-radius: 15px; border: 2px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; backdrop-filter: blur(4px); margin: 15px;">
+                    <h2 style="font-size:2.2rem;"><?= $p['name'] ?></h2>
+                    <p style="font-size:1.4rem; color:#555;"><?= $p['category'] ?></p>
+                    <p style="font-size:2rem; margin-top:5px; font-weight:bold;">$<?= $p['price'] ?></p>
                 </div>
             </a>
             <form method="POST" action="cart_actions.php" style="width:100%;">

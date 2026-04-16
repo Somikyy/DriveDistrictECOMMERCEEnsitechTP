@@ -24,6 +24,7 @@ $pdo->exec("
         username TEXT NOT NULL UNIQUE,
         email TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'user',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
     
@@ -48,9 +49,46 @@ $pdo->exec("
     );
 ");
 
-// Insert initial products if the table is empty
+// Database upgrades
+try {
+    $pdo->exec("ALTER TABLE products ADD COLUMN image TEXT DEFAULT ''");
+    $img_urls = [
+        1 => 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=400',
+        2 => 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=400',
+        3 => 'https://images.unsplash.com/photo-1624378439575-d1ead6bb246b?q=80&w=400',
+        4 => 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?q=80&w=400',
+        5 => 'https://images.unsplash.com/photo-1559551409-dadc959f76b8?q=80&w=400',
+        6 => 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=400',
+        7 => 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=400',
+        8 => 'https://images.unsplash.com/photo-1618517351616-389a7ac72579?q=80&w=400',
+        9 => 'https://images.unsplash.com/photo-1551028719-0c14457cc7dc?q=80&w=400',
+        10 => 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=400'
+    ];
+    foreach($img_urls as $id => $url) {
+        $pdo->exec("UPDATE products SET image = '$url' WHERE id = $id AND (image IS NULL OR image = '')");
+    }
+} catch (Exception $e) {}
+
+try {
+    $pdo->exec("ALTER TABLE users ADD COLUMN cart TEXT DEFAULT '[]'");
+} catch (Exception $e) {}
+
+try {
+    $pdo->exec("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'");
+} catch (Exception $e) {}
+
+// Ensure default admin exists
+$stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
+$stmt->execute(['admin']);
+if (!$stmt->fetch()) {
+    $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+    $stmt->execute(['admin', 'admin@drivedistrict.com', password_hash('admin123', PASSWORD_DEFAULT), 'admin']);
+}
+
+// Initial products insertion with blank image if somehow tables were dropped
 $stmt = $pdo->query("SELECT COUNT(*) FROM products");
 if ($stmt->fetchColumn() == 0) {
+    // Note: The images will be patched by the alter script or handled on next reload, keeping it simple.
     $initial_products = [
         ['Vintage Zip-Up', 'Jackets', 89, 12, '["XS","S","M","L","XL","XXL"]', '["#1a1a1a","#5C4033","#3B5B3B"]', 'Classic zip-up hoodie with a worn-in look. Brushed fleece interior for extra warmth.'],
         ['Oversized Tee', 'T-Shirts', 39, 30, '["XS","S","M","L","XL","XXL"]', '["#FFFFFF","#000000","#C8A87A"]', 'Heavyweight 240gsm cotton tee. Drop-shoulder relaxed fit. A wardrobe essential.'],
@@ -69,7 +107,7 @@ if ($stmt->fetchColumn() == 0) {
     }
 }
 
-// Global products array to maintain compatibility with existing project
+// Global products array
 $products = [];
 $stmt = $pdo->query("SELECT * FROM products");
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -95,4 +133,12 @@ function getCartCount() {
         $count += $item['qty'];
     }
     return $count;
+}
+
+function isAdmin() {
+    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+}
+
+function isLoggedIn() {
+    return isset($_SESSION['user_id']);
 }

@@ -33,9 +33,9 @@ $current_cart = array_slice($cart_items, $offset, $limit, true);
             $p = $products[$item['product_id']];
         ?>
         <div class="product-item">
-            <a href="product_detail.php?id=<?= $p['id'] ?>" class="catalogue-post" style="text-decoration:none; color:inherit; cursor:pointer;">
-                <div style="text-align:center; padding:10px;">
-                    <h2 style="font-size:2rem;"><?= $p['name'] ?></h2>
+            <a href="product_detail.php?id=<?= $p['id'] ?>" class="catalogue-post" style="text-decoration:none; color:inherit; cursor:pointer; <?php if(!empty($p['image'])) echo "background-image: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 100%), url('".$p['image']."'); background-size: cover; background-position: center;"; ?>">
+                <div style="text-align:center; background: rgba(247, 243, 232, 0.95); padding: 10px 20px; border-radius: 15px; border: 2px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; backdrop-filter: blur(4px); margin: 15px;">
+                    <h2 style="font-size:2.2rem;"><?= $p['name'] ?></h2>
                     <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-top:5px;">
                         <p style="font-size:1.5rem;">Size: <?= htmlspecialchars($item['size'] ?? '') ?></p>
                         <?php if(!empty($item['color'])): ?>
